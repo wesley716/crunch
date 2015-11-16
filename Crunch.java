@@ -13,9 +13,25 @@ public class Crunch
 
     public static void playCrunch()
     {
-        //Ask if player wants to go first
-        int player1 = 0;
-        int player2 = 1;
+                Scanner k = new Scanner(System.in);
+        String response = "y";
+        int player1 = 1;
+        int player2 = 0;
+        do
+        {
+            System.out.print("Would you like to go first? ");
+            response = k.nextLine();
+            if (response.equals("y"))
+            {
+                player1 = 0;
+                player2 = 1;
+            }
+            else 
+            {
+                player1 = 1;
+                player2 = 0;
+            }
+        } while (!response.equals("y") && !response.equals("n");
 
         boolean stillPlaying = true;
         while (stillPlaying)
