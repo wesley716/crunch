@@ -1,4 +1,3 @@
-
 /**
  * Game of Crunch
  * 
@@ -10,17 +9,21 @@ import java.util.Scanner;
 public class Crunch
 {
 
-    public static void playCrunch()
+    public static void playCrunch(int numberOfSticks, int minSticks, int maxSticks)
     {
-        //Ask if player wants to go first
         int player1 = 0;
         int player2 = 1;
+        if (!getYesNoResponse("Do you want to go first? (y/n)\t"))
+        {
+            player1 = 1;
+            player2 = 0;
+        }
 
         boolean stillPlaying = true;
-        while (stillPlaying)
+        do
         {
             int turnNum = 0;
-            int sticksRemaining = 21;
+            int sticksRemaining = numberOfSticks;
             while (sticksRemaining > 0)
             {
                 turnNum++;
@@ -30,42 +33,28 @@ public class Crunch
                 for (int i = 0; i < sticksRemaining; i++) System.out.print("| ");
                 System.out.println();
                 System.out.println();
-                if (turnNum % 2 == 1)   sticksRemaining -= takeTurn(player1, sticksRemaining);
-                else                                    sticksRemaining -= takeTurn(player2, sticksRemaining);
+                if (turnNum % 2 == 1)   sticksRemaining -= takeTurn(player1, sticksRemaining, minSticks, maxSticks);
+                else                                    sticksRemaining -= takeTurn(player2, sticksRemaining, minSticks, maxSticks);
                 System.out.println("===================================================");
             }
             if (turnNum % 2 == 1)   System.out.println("Player 2 wins!");
             else                    System.out.println("Player 1 wins!");
-            System.out.println("Do you want to play again? (y/n)");
-            Scanner scan = new Scanner(System.in);
-            String s = scan.nextLine();
-            if (s.equals("y"))      stillPlaying = true;
-            else                    stillPlaying = false;
-        }
+
+        } while (getYesNoResponse("Do you want to play again? (y/n) \t"));
         System.out.print("Goodbye!");
     }
 
-    public static int takeTurn(int player, int sticks)
+    public static int takeTurn(int player, int sticks, int minSticks, int maxSticks)
     {
         if (player == 0)
         {
-            int s = 99;
-            boolean invalidNumber = true;
-            while (invalidNumber)
-            {
-                System.out.print("\tHow many sticks do you want to take?\t");
-                Scanner scan = new Scanner(System.in);
-                s = scan.nextInt();
-                if (s <= sticks && s < 3 && s > 0)    invalidNumber = false;
-            }
-            System.out.println();
-            return s;
+            return getIntResponse(minSticks, Math.min(2, sticks));
         }
         else
         {
             int s = 0;
-            if (sticks < 2) s = 1;
-            else  s = 1 + (int)(Math.random() + 0.5);
+            if (sticks < maxSticks) s = minSticks;
+            else  s = minSticks + (int)(Math.random() * ((maxSticks - minSticks) + 1));
             System.out.print("\tThe computer takes " + s + " stick");
             if (s == 1) System.out.print(".");
             else        System.out.print("s.");
@@ -73,6 +62,45 @@ public class Crunch
             System.out.println();
             return s;
         }
+    }
+
+    public static boolean getYesNoResponse(String prompt)
+    {
+        boolean waiting = true;
+        do
+        {
+            System.out.print (prompt);
+            Scanner scan = new Scanner(System.in);
+            String s = scan.nextLine();
+            if (s.equals("y"))      return true;
+            else if (s.equals("n")) return false;
+            else                    waiting = true;
+        } while(waiting);
+        return false;
+    }
+
+    public static int getIntResponse(int min, int max)
+    {
+        boolean invalidNumber = true;
+        int response = 0;
+        do 
+        {
+            System.out.print("\tHow many sticks do you want to take?\t");
+            Scanner scan = new Scanner(System.in);
+            try
+            {
+                response = scan.nextInt();
+                if (response <= max && response >= min)    invalidNumber = false;
+            }
+            catch (java.util.InputMismatchException ex)
+            {
+                System.out.println("Please enter a number between " + min + " and " + max + ".");
+                invalidNumber = true;
+            }
+
+        } while (invalidNumber);
+        System.out.println();
+        return response;
     }
 
 }
