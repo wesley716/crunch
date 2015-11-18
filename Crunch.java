@@ -1,10 +1,9 @@
 
 /**
- * Write a description of class Crunch here.
+ * Game of Crunch
  * 
- * @author (your name) 
- * @version (a version number or a date)
- * Code for "fake clearing" the terminal was based on an idea from the thread: http://stackoverflow.com/questions/2979383/java-clear-the-console
+ * @author Wesley Kuo & Amrit Rau (Period 4) 
+ * @version 20 November 2015
  */
 
 import java.util.Scanner;
