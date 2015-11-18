@@ -48,7 +48,7 @@ public class Crunch
     {
         if (player == 0)
         {
-            return getIntResponse(minSticks, Math.min(2, sticks));
+            return getIntResponse(minSticks, Math.min(maxSticks, sticks));
         }
         else
         {
